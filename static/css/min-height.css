@@ -1,0 +1,18 @@
+.header-min-height{
+    min-width: 1450px;
+    max-width: 1920px;
+}
+.chart-small-min-height{
+    min-height: 190px;
+    min-width: 395px;
+}
+
+.chart-middle-min-height{
+    min-height: 215px;
+    min-width: 590px;
+}
+
+.chart-big-min-height{
+    min-height: 370px;
+    min-width: 1420px;
+}

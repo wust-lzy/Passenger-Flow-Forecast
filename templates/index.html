@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"/>
+    <link rel="icon" href="{{ url_for('static', filename='images/icon.jpg') }}">
+    <title>轨道交通智慧客流分析预测</title>
+{#    <link rel="stylesheet" href="{{ url_for('static', filename='css/min-height.css') }}"/>#}
+{#    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}"/>#}
+{#    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">#}
+{#    <link rel="stylesheet" href="{{ url_for('static', filename='css/loader.css') }}">#}
+{#    <link rel="stylesheet" href="{{ url_for('static', filename='css/modal.css') }}">#}
+    {% assets "css_index" %}
+        <link rel="stylesheet" href="{{ ASSET_URL }}">
+    {% endassets %}
+</head>
+<body>
+<!-- 头部的盒子 -->
+<header class="header-min-height">
+    <div class="showTime" style="color: white;font-family: electronicFont;"></div>
+    <div class="showTime_2" style="color: white;font-family: electronicFont;"></div>
+    <h1>轨道交通智慧客流分析预测</h1>
+</header>
+
+<!-- 页面主体部分 -->
+<div class="mainbox">
+
+    <div class="column">
+        <div class="panel bar">
+            <h2>单月整体的客流波动分析</h2>
+            <div class="chart-small-min-height chart">
+                <div class="chart-loader">
+                    <div class="loader"></div>
+                </div>
+            </div>
+            <div class="panel-footer"></div>
+        </div>
+
+        <div class="panel line">
+            <h2>
+                早晚高峰客流分布分析
+                <input type='radio' id='radio1-1' checked='checked' name='radio'>
+                <label for='radio1-1'>1-3月</label>
+                <!-- Radio two -->
+                <input type='radio' id='radio1-2' name='radio'>
+                <label for='radio1-2'>4-7月</label>
+            </h2>
+            <div class="chart-small-min-height chart">
+                <div class="chart-loader">
+                    <div class="loader"></div>
+                </div>
+            </div>
+            <div class="panel-footer"></div>
+        </div>
+
+        <div class="panel pie">
+            <h2>用户年龄结构分析</h2>
+            <div class="chart-small-min-height chart">
+                <div class="chart-loader">
+                    <div class="loader"></div>
+                </div>
+            </div>
+            <div class="panel-footer"></div>
+        </div>
+
+    </div>
+
+    <div class="column">
+        <!-- no模块制作 -->
+        <div class=".chart-middle-min-height no">
+            <div class="no-hd">
+                <div class="no-bd">
+                    <ul>
+                        <li>当前站点当天预测的客流量为</li>
+                        <li>当前线路当天预测的客流量为</li>
+                    </ul>
+                    <br>
+                </div>
+                <ul>
+                    <li id="station_data">000000</li>
+                    <li id="route_data">000000</li>
+                </ul>
+            </div>
+            <div style="margin: 0 auto;width: 550px;">
+                <input type="date" class="form-control" id="predict_time" required="required" title="选择时间"
+                       value="2020-07-01">
+                <select class="form-control" required="required" id="station">
+                    <option value="Sta1">Sta1</option>
+                </select>
+                <select class="form-control" required="required" id="route">
+                    <option value="Sta1">1号线</option>
+                </select>
+                <select class="form-control" required="required" id="weather">
+                </select>
+                <input type="number" required="required" id="temperature" value="15" style="width:100px"><span
+                    style="color: white; font-size: 15px">℃</span>
+                <button id="predict_station_button"><label>预测站点</label></button>
+                <button id="predict_route_button"><label>预测线路</label></button>
+
+
+            </div>
+        </div>
+        <!-- 地图模块 -->
+        <div class="map">
+            <div class="map1"></div>
+            <div class="map2"></div>
+            <div class="map3"></div>
+            <div class="chart"></div>
+            <div class="panel-footer"></div>
+        </div>
+
+    </div>
+
+    <div class="column">
+
+        <div class="panel bar2">
+            <h2>工作日和周末的客流分析</h2>
+            <div class="chart-small-min-height chart">
+                <div class="chart-loader">
+                    <div class="loader"></div>
+                </div>
+            </div>
+            <div class="panel-footer"></div>
+        </div>
+
+        <div class="panel line2">
+            <h2>
+                断面客流分析
+                <select id="select">
+                    <option value="1">1号线</option>
+                    <option value="2">2号线</option>
+                    <option value="3">3号线</option>
+                    <option value="4">4号线</option>
+                    <option value="5">5号线</option>
+                    <option value="6">10号线</option>
+                    <option value="7">11号线</option>
+                    <option value="8">12号线</option>
+                </select>
+            </h2>
+            <div class="chart-small-min-height chart">
+                <div class="chart-loader">
+                    <div class="loader"></div>
+                </div>
+            </div>
+            <div class="panel-footer"></div>
+        </div>
+
+        <div class="panel pie2">
+            <h2>
+                od客流分析
+                <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal"
+                        id="echartstest" style="color: white">
+                </button>
+            </h2>
+            <div class="chart-small-min-height chart">
+                <div class="chart-loader">
+                    <div class="loader"></div>
+                </div>
+            </div>
+            <div class="panel-footer"></div>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="width:800px;height:550px;">
+            <div class="modal-header">
+                <h3 class="modal-title" id="myModalLabel" style="text-align:center">
+
+                </h3>
+            </div>
+            <div class="modal-body" style="width:800px;">
+                <div id="main2" style="width:800px;height:400px;">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" style="color: white">关闭
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+</div>
+<div class="mainbox" style="height: 600px">
+    <div class="panel bar3" style="width: 100%; height: 400px">
+        <h2 style="color: white">
+            单站客流TOP10
+            <!-- <a href="javacript:;">2020</a><a href="javascript:;">2021</a> -->
+            <input type='radio' id='radio2-1' checked='checked' name='radio2'>
+            <label for='radio2-1'>进站</label>
+            <!-- Radio two -->
+            <input type='radio' id='radio2-2' name='radio2'>
+            <label for='radio2-2'>出站</label>
+        </h2>
+        <div class="chart-big-min-height chart" style="width: 100%;  height: 100%">
+            <div class="chart-loader">
+                <div class="loader"></div>
+            </div>
+        </div>
+        <div class="panel-footer"></div>
+    </div>
+</div>
+{#<script type="text/javascript" src="{{ url_for('static',filename='js/main/time.js') }}"></script>#}
+</body>
+{#<!-- 先引入jquery -->#}
+{#<script src="{{ url_for('static',filename='js/jquery.min.js') }}"></script>#}
+{#<script src="{{ url_for('static',filename='js/bootstrap.min.js') }}"></script>#}
+{#<script src="{{ url_for('static', filename='js/flexible.js') }}"></script>#}
+{#<script src="{{ url_for('static', filename='js/echarts.min.js') }}"></script>#}
+{#<!-- 计算模块 -->#}
+{#<script type="text/javascript" src="{{ url_for('static',filename='js/main/calculate.js') }}"></script>#}
+{#<!-- 单月整体的客流波动分析 -->#}
+{#<script type="text/javascript" src="{{ url_for('static',filename='js/main/mouth.js') }}"></script>#}
+{##}
+{#<!-- 工作日和周末的客流分析 -->#}
+{#<script type="text/javascript" src="{{ url_for('static',filename='js/main/weekday.js') }}"></script>#}
+{##}
+{#<!-- 用户年龄结构分析 -->#}
+{#<script type="text/javascript" src="{{ url_for('static',filename='js/main/age.js') }}"></script>#}
+{##}
+{#<!-- 单站的点Top10 -->#}
+{#<script type="text/javascript" src="{{ url_for('static',filename='js/main/top.js') }}"></script>#}
+{##}
+{#<!-- 断面  -->#}
+{#<script type="text/javascript" src="{{ url_for('static',filename='js/main/section.js') }}"></script>#}
+{##}
+{#<!-- od -->#}
+{#<script type="text/javascript" src="{{ url_for('static',filename='js/main/od.js') }}"></script>#}
+{##}
+{#<!-- 早晚高峰 -->#}
+{#<script type="text/javascript" src="{{ url_for('static',filename='js/main/peak.js') }}"></script>#}
+{#</html>#}
+
+{% assets "js_index" %}
+    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+{% endassets %}

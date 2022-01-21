@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport"/>
+    <title>od客流分析</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        #mask {
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            display: block;
+        }
+
+        #mask-body {
+            position: absolute;
+            top: 50px;
+            left: 0px;
+            width: 100%;
+            height: 100%;
+            opacity: 1;
+            z-index: 99;
+        }
+    </style>
+</head>
+<body>
+<div id="mask">
+    <a href="{{ url_for('test') }}" style="color: white">返回</a>
+    <div id="mask-body"></div>
+</div>
+
+
+<script src="{{ url_for('static', filename='js/flexible.js') }}"></script>
+<script src="{{ url_for('static', filename='js/echarts.min.js') }}"></script>
+<!-- 先引入jquery -->
+<script src="{{ url_for('static',filename='js/jquery.min.js') }}"></script>
+
+{#od#}
+<script type="text/javascript">
+    var mydom = document.querySelector("#mask-body");
+    var mypie = echarts.init(mydom);
+    var app = {};
+
+    var option;
+
+    option = {
+        backgroundColor: 'black',
+        color: ['#df33a5', '#f4b13d', '#1482e5', '#70b4eb', '#5de1d9', '#50beff', '#787cf1', '#b4e0f3'],
+        tooltip: {
+            backgroundColor: '#222',
+            trigger: 'item',
+            triggerOn: 'mousemove',
+            textStyle: {
+                color: '#ccc'
+            },
+        },
+        series: {
+            label: {
+                textStyle: {
+                    color: '#ccc'
+                }
+            },
+            itemStyle: {
+                borderWidth: 1,
+            },
+            lineStyle: {
+
+                color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [{
+                    offset: 0,
+                    color: '#136bff'
+                }, {
+                    offset: 1,
+                    color: '#87ffd6'
+                }]),
+                curveness: 0.5,
+                opacity: 0.5
+            },
+            grid: {
+                top: '10%',
+                bottom: '0%'
+            },
+            type: 'sankey',
+            layout: 'none',
+            emphasis: {
+                focus: 'adjacency'
+            },
+            data: [],
+            links: []
+        },
+        dataZoom: [{
+            id: 'dataZoomX',
+            type: 'slider',
+            filterMode: 'filter'
+        },
+            {
+                id: 'dataZoomY',
+                type: 'slider',
+                filterMode: 'empty'
+            }
+        ],
+    };
+    $.ajax({
+        url: 'static/data/line-to-line_od.json',
+        dataType: 'json',
+        cache: false
+    }).done(function (data) {
+        let datas = []
+        let series_data = []
+        let series_links = []
+        for (let item in data) {
+            if (datas.indexOf(data[item]['source']) == -1) {
+                datas.push(data[item]['source'])
+            }
+            if (datas.indexOf(data[item]['target']) == -1) {
+                datas.push(data[item]['target'])
+            }
+            series_links.push({
+                source: data[item]['source'],
+                target: data[item]['target'],
+                value: data[item]['value']
+            })
+        }
+        for (let i in datas) {
+            series_data.push({
+                name: datas[i]
+            })
+        }
+        {#console.log(series_data)#}
+        {#console.log(data)#}
+        mypie.setOption({
+            series: {
+                data: series_data,
+                links: series_links
+            }
+        })
+    })
+
+    if (option && typeof option === 'object') {
+        mypie.setOption(option);
+    }
+
+</script>
+
+
+</body>
+</html>
