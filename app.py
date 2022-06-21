@@ -69,3 +69,5 @@ def predict(select, pre_time, name, temperature, weather):
     elif select == 'route':
         data = pre_route(pre_time, name, int(temperature), weather)
         return '{}'.format(int(data))
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=5000, debug=False)

@@ -1,9 +1,8 @@
 version: '3'
 services:
   web:
-    image: passenger
+    image: "passenger"
     container_name: "passenger"
-    network_mode: "host"
+    tty: true
     ports:
       - "5000:5000"
-    command: flask run --host=0.0.0.0
